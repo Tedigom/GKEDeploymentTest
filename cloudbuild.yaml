@@ -34,6 +34,6 @@ steps:
         kubectl create deployment test --image=gcr.io/$PROJECT_ID/mainservice:$SHORT_SHA
         kubectl expose deployment test --type=LoadBalancer --port=80 --target-port=8080
         kubectl get pods
-        kubectl get service mainbackservice
+        kubectl get services
 
 timeout: 1600s
