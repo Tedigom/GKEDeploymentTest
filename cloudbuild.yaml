@@ -1,0 +1,39 @@
+steps:
+#  프로젝트 build (*.jar 파일 생성)
+  - id: 'build'
+    name: 'gcr.io/cloud-builders/mvn'
+    args: [
+        'clean',
+        'package',
+        '-Dmaven.test.skip=true'
+    ]
+
+#    Docker image 생성 (Dockerfile 에 작성된 환경을 image)
+#    Docker image name format : [Registry URL]/[프로젝트 ID]/[이미지명]:[tag]
+  - id: 'docker build'
+    name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/mainservice:$SHORT_SHA', '.' ]
+
+#    Docker image list
+  - id: 'docker image list'
+    name: 'gcr.io/cloud-builders/docker'
+    args: [ 'images']
+
+#    Docker registry push
+  - id: 'publish'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/mainservice:$SHORT_SHA']
+
+  - id: 'deploy'
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud container clusters get-credentials uplus-poc-test --zone=asia-northeast1-a --project=springboot-deploy-test
+        kubectl create deployment test --image=gcr.io/$PROJECT_ID/mainservice:$SHORT_SHA
+        kubectl expose deployment test --type=LoadBalancer --port=80 --target-port=8080
+        kubectl get pods
+        kubectl get service mainbackservice
+
+timeout: 1600s
