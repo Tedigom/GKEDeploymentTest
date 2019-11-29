@@ -39,19 +39,5 @@ steps:
 timeout: 1600s
 
 
-#빌드 파일의 설명
-# 1) steps : 파일의 최초 시작으로 steps를 정의한다. steps 아래로는 -(dash) 로 배열 형식으로 yaml 파일을 작성하고, 기본적으로 위에 있는
-# 순서대로 시작한다. 순서를 컨트롤하기 위해서는 id항목과 waitFor 항목이 필요하다.
 
-# 2) name : id는 없어도 되지만, name은 필수 항목이다. 구글은 build의 단계별로 별도의 컨테이너 환경에서 작업하도록 구성되어 있다.
-# 이 작업환경의 컨테이너 명을 선언해 주는 부분이다.
-# 'gcr.io/cloud-builders/mvn' 은 maven 이미지로서 메이븐 명령어를 바로 실행시킬 수 있다.
-# 'gcr.io/cloud-builders/docker'는 docker 관련 명령어를 실행하는 이미지이다. 보통 image build, push가 해당 이미지에서 수행된다.
-# 'gcr.io/cloud-builders/gcloud'는 구글 클라우드 SDK 가 실행되어진 컨테이너이다. cloudbuild.yaml 파일에서는 개발 클러스터에 배포를 GCB에서 수행을 하기 위해 추가하였다.
-
-# 3) args : 컨테이너에서 필요한 명령어들을 작성한다. 배열 형식으로 작성을 할 수 있으며, entrypoint: 'bash'라고 선언하여 bash 명령어 형식으로 작성이 가능하다.
-
-# 4) waitFor : 이전 단계가 끝나고 다음단계가 필요하거나, 병렬로 빌드를 실행하고 싶을 경우 설정을 한다.
-
-# 자세한 설명은 https://cloud.google.com/cloud-buiild/docs 문서에 나와있다.
 
